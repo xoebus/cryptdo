@@ -1,3 +1,4 @@
+
                                         ⢀⣀ ⡀⣀ ⡀⢀ ⣀⡀ ⣰⡀ ⢀⣸ ⢀⡀
                                         ⠣⠤ ⠏  ⣑⡺ ⡧⠜ ⠘⠤ ⠣⠼ ⠣⠜
 
@@ -11,6 +12,7 @@ program will let you transparently decrypt a file, run your command, and then re
 again.
 
 The usage will show how this can be useful.
+
 
 = usage
 
@@ -28,9 +30,11 @@ If you need to change the key of your encrypted files then the following command
 
     $ cryptdo-rekey -old hunter2 -new abetterkey terraform.tfstate.enc
 
+
 = installation
 
 Not yet!
+
 
 = development
 
@@ -39,4 +43,18 @@ Not yet!
     $ dep ensure
     ...
     $ go test ./...
+
+
+= cryptography
+
+The encryption used is AES-256 in GCM mode with a 12 byte nonce. The nonce is generated from the Go
+standard library cryptographically secure random number generator.
+
+The encryption key is derived from the user's passphrase using PBKDF2-HMAC-SHA384. The hashing
+function is applied 100,000 times and the salt used is 32 bytes. SHA384 is used because of the
+proliferation of specialized hardware to attack SHA256 due to its use in Bitcoin.
+
+The encryption key (derived from the user's passphrase) must be rotated before 2^32 encryptions have
+taken place with a single key. Due to the usage patterns of a tool like this it is unlikely that
+this limit will be reached but a `cryptdo-rekey` tool has been provided, just in case.
 
