@@ -1,16 +1,16 @@
-                              ⢀⣀ ⡀⣀ ⡀⢀ ⣀⡀ ⣰⡀ ⢀⣸ ⢀⡀
-                              ⠣⠤ ⠏  ⣑⡺ ⡧⠜ ⠘⠤ ⠣⠼ ⠣⠜
+                                        ⢀⣀ ⡀⣀ ⡀⢀ ⣀⡀ ⣰⡀ ⢀⣸ ⢀⡀
+                                        ⠣⠤ ⠏  ⣑⡺ ⡧⠜ ⠘⠤ ⠣⠼ ⠣⠜
 
-           a simple wrapper for commands which access sensitive files
+                     a simple wrapper for commands which access sensitive files
 
 = about
 
-Occasionally you need to run commands which put sensitive information in files.
-Then, through poor life choices, you want to commit those files to a source
-repository or something similar. This program will let you transparently
-decrypt a file, run your command, and then re-encrypt the file again.
+Occasionally you need to run commands which put sensitive information in files.  Then, through poor
+life choices, you want to commit those files to a source repository or something similar. This
+program will let you transparently decrypt a file, run your command, and then re-encrypt the file
+again.
 
-The usage will make how this usefull more obvious.
+The usage will show how this can be useful.
 
 = usage
 
@@ -19,14 +19,12 @@ First, you need to bootstrap the encryption by encrypting your sensitive files.
     $ cryptdo-boostrap -passphrase hunter2 terraform.tfstate
     $ rm terraform.tfstate
 
-Next, you can run commands which need to access those files by decorating them
-with cryptdo. This will decrypt the file, run the command, and then re-encrypt
-the file with any changes.
+Next, you can run commands which need to access those files by decorating them with cryptdo. This
+will decrypt the file, run the command, and then re-encrypt the file with any changes.
 
     $ cryptdo -passphrase hunter2 -- terraform apply
 
-If you need to change the key of your encrypted files then the following
-command is your friend.
+If you need to change the key of your encrypted files then the following command is your friend.
 
     $ cryptdo-rekey -old hunter2 -new abetterkey terraform.tfstate.enc
 
@@ -41,6 +39,4 @@ Not yet!
     $ dep ensure
     ...
     $ go test ./...
-
-
 
