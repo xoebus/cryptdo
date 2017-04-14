@@ -1,0 +1,7 @@
+memo = "d7f1a7207c39125afcb9ca2365832cb83458edfc17f2f7e8d28fd56f19436856"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/crypto"
+  packages = ["pbkdf2"]
+  revision = "cbc3d0884eac986df6e78a039b8792e869bff863"
