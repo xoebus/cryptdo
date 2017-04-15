@@ -53,11 +53,12 @@ The encryption used is AES-256 in GCM mode with a 12 byte nonce. The nonce is ge
 from the Go standard library cryptographically secure random number generator.
 
 The encryption key is derived from the user's passphrase using PBKDF2-HMAC-SHA384. The
-hashing function is applied 100,000 times and the salt used is 32 bytes. SHA384 is used
-because of the proliferation of specialized hardware to attack SHA256 due to its use in
-Bitcoin. The salt is generated from the Go standard library cryptographically secure
-random number generator. Both the salt and the nonce are prepended to the ciphertext for
-storage.
+hashing function is applied 100,000 times and the salt used is 32 bytes. SHA384 is
+used because of the proliferation of specialized hardware to attack SHA256 due to its
+use in Bitcoin. The salt is generated from the Go standard library cryptographically
+secure random number generator. The salt, nonce, and derivation iteration count are
+marshalled together using Protocol Buffers. The definition of the message format is in
+this repository.
 
 The encryption key (derived from the user's passphrase) must be rotated before 2^32
 encryptions have taken place with a single key. Due to the usage patterns of a tool like

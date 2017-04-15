@@ -1,4 +1,10 @@
-memo = "d7f1a7207c39125afcb9ca2365832cb83458edfc17f2f7e8d28fd56f19436856"
+memo = "9f16832a7608f8d508a09f23793d2af7eff7eb874bea42e54b3fed0ac46d2586"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/golang/protobuf"
+  packages = ["proto"]
+  revision = "2bba0603135d7d7f5cb73b2125beeda19c09f4ef"
 
 [[projects]]
   branch = "master"

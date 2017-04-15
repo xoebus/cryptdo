@@ -1,15 +1,16 @@
 package cryptdo
 
 import (
-	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
 	"crypto/sha512"
-	"errors"
 	"io"
 
+	"github.com/golang/protobuf/proto"
 	"golang.org/x/crypto/pbkdf2"
+
+	"github.com/xoebus/cryptdo/cryptdopb"
 )
 
 const (
@@ -22,15 +23,13 @@ const (
 	nonceSize = 12
 )
 
-var ErrShortCiphertext = errors.New("cryptdo: ciphertext too short")
-
 func Encrypt(plaintext []byte, passphrase string) ([]byte, error) {
 	salt, err := randomBytes(saltSize)
 	if err != nil {
 		return nil, err
 	}
 
-	key := derivedKey(passphrase, salt)
+	key := derivedKey(passphrase, salt, iterations)
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -48,19 +47,23 @@ func Encrypt(plaintext []byte, passphrase string) ([]byte, error) {
 
 	ciphertext := aesgcm.Seal(nil, nonce, plaintext, nil)
 
-	return join(salt, nonce, ciphertext), nil
+	message := &cryptdopb.Message{
+		Iterations: iterations,
+		Salt:       salt,
+		Nonce:      nonce,
+		Ciphertext: ciphertext,
+	}
+
+	return proto.Marshal(message)
 }
 
 func Decrypt(ciphertext []byte, passphrase string) ([]byte, error) {
-	if len(ciphertext) < (nonceSize + saltSize) {
-		return nil, ErrShortCiphertext
+	message := &cryptdopb.Message{}
+	if err := proto.Unmarshal(ciphertext, message); err != nil {
+		return nil, err
 	}
 
-	salt := ciphertext[:saltSize]
-	nonce := ciphertext[saltSize : saltSize+nonceSize]
-	pure := ciphertext[saltSize+nonceSize:]
-
-	key := derivedKey(passphrase, salt)
+	key := derivedKey(passphrase, message.Salt, int(message.Iterations))
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -71,15 +74,11 @@ func Decrypt(ciphertext []byte, passphrase string) ([]byte, error) {
 		return nil, err
 	}
 
-	return aesgcm.Open(nil, nonce, pure, nil)
+	return aesgcm.Open(nil, message.Nonce, message.Ciphertext, nil)
 }
 
-func derivedKey(passphrase string, salt []byte) []byte {
-	return pbkdf2.Key([]byte(passphrase), salt, iterations, keySize, sha512.New384)
-}
-
-func join(slices ...[]byte) []byte {
-	return bytes.Join(slices, []byte{})
+func derivedKey(passphrase string, salt []byte, iters int) []byte {
+	return pbkdf2.Key([]byte(passphrase), salt, iters, keySize, sha512.New384)
 }
 
 func randomBytes(count int) ([]byte, error) {

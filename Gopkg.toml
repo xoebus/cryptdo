@@ -1,4 +1,8 @@
 
 [[dependencies]]
   branch = "master"
+  name = "github.com/golang/protobuf"
+
+[[dependencies]]
+  branch = "master"
   name = "golang.org/x/crypto"
