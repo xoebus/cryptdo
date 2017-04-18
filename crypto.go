@@ -5,6 +5,8 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"crypto/sha512"
+	"errors"
+	"fmt"
 	"io"
 
 	"github.com/golang/protobuf/proto"
@@ -22,6 +24,8 @@ const (
 	keySize   = 32
 	nonceSize = 12
 )
+
+var ErrEmptyMessage = errors.New("cryptdo: empty message")
 
 func Encrypt(plaintext []byte, passphrase string) ([]byte, error) {
 	salt, err := randomBytes(saltSize)
@@ -58,6 +62,10 @@ func Encrypt(plaintext []byte, passphrase string) ([]byte, error) {
 }
 
 func Decrypt(ciphertext []byte, passphrase string) ([]byte, error) {
+	if len(ciphertext) == 0 {
+		return nil, ErrEmptyMessage
+	}
+
 	message := &cryptdopb.Message{}
 	if err := proto.Unmarshal(ciphertext, message); err != nil {
 		return nil, err
@@ -72,6 +80,13 @@ func Decrypt(ciphertext []byte, passphrase string) ([]byte, error) {
 	aesgcm, err := cipher.NewGCM(block)
 	if err != nil {
 		return nil, err
+	}
+
+	if aesgcm.NonceSize() != len(message.Nonce) {
+		return nil, &InvalidNonceError{
+			expected: aesgcm.NonceSize(),
+			actual:   len(message.Nonce),
+		}
 	}
 
 	return aesgcm.Open(nil, message.Nonce, message.Ciphertext, nil)
@@ -89,4 +104,13 @@ func randomBytes(count int) ([]byte, error) {
 	}
 
 	return bs, nil
+}
+
+type InvalidNonceError struct {
+	expected int
+	actual   int
+}
+
+func (i *InvalidNonceError) Error() string {
+	return fmt.Sprintf("cryptdo: message nonce has incorrect size (expected %d, got: %d)", i.expected, i.actual)
 }
