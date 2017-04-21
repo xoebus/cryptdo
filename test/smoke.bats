@@ -1,12 +1,21 @@
 #!/usr/bin/env bats
 
+WORKDIR=$BATS_TMPDIR/cryptdo
+PATH=$WORKDIR:$PATH
+
 setup() {
-  cd $BATS_TMPDIR
+  rm -rf $$WORKDIR
+  mkdir -p $WORKDIR
+
+  go build -o $WORKDIR/cryptdo github.com/xoebus/cryptdo/cmd/cryptdo
+  go build -o $WORKDIR/cryptdo-bootstrap github.com/xoebus/cryptdo/cmd/cryptdo-bootstrap
+  go build -o $WORKDIR/cryptdo-rekey github.com/xoebus/cryptdo/cmd/cryptdo-rekey
+
+  cd $WORKDIR
 }
 
 teardown() {
-  rm -f $BATS_TMPDIR/*.txt
-  rm -f $BATS_TMPDIR/*.enc
+  rm -rf $WORKDIR
 }
 
 @test "an encryption roundtrip" {
