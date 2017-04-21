@@ -77,18 +77,6 @@ func defaultHostPolicy(context.Context, string) error {
 // It obtains and refreshes certificates automatically,
 // as well as providing them to a TLS server via tls.Config.
 //
-// A simple usage example:
-//
-//	m := autocert.Manager{
-//		Prompt: autocert.AcceptTOS,
-//		HostPolicy: autocert.HostWhitelist("example.org"),
-//	}
-//	s := &http.Server{
-//		Addr: ":https",
-//		TLSConfig: &tls.Config{GetCertificate: m.GetCertificate},
-//	}
-//	s.ListenAndServeTLS("", "")
-//
 // To preserve issued certificates and improve overall performance,
 // use a cache implementation of Cache. For instance, DirCache.
 type Manager struct {
@@ -124,7 +112,7 @@ type Manager struct {
 	// RenewBefore optionally specifies how early certificates should
 	// be renewed before they expire.
 	//
-	// If zero, they're renewed 1 week before expiration.
+	// If zero, they're renewed 30 days before expiration.
 	RenewBefore time.Duration
 
 	// Client is used to perform low-level operations, such as account registration
@@ -643,10 +631,10 @@ func (m *Manager) hostPolicy() HostPolicy {
 }
 
 func (m *Manager) renewBefore() time.Duration {
-	if m.RenewBefore > maxRandRenew {
+	if m.RenewBefore > renewJitter {
 		return m.RenewBefore
 	}
-	return 7 * 24 * time.Hour // 1 week
+	return 720 * time.Hour // 30 days
 }
 
 // certState is ready when its mutex is unlocked for reading.

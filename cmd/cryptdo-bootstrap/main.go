@@ -1,38 +1,37 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 
+	flags "github.com/jessevdk/go-flags"
+
 	"github.com/xoebus/cryptdo"
 )
 
-var passphrase = flag.String("passphrase", "", "passphrase for file encryption")
+var opts struct {
+	Passphrase string `short:"p" long:"passphrase" description:"passphrase for file encryption" required:"true"`
+
+	Positional struct {
+		Files []string `positional-arg-name:"FILE" required:"true"`
+	} `positional-args:"yes"`
+}
 
 func main() {
-	flag.Parse()
-
-	if *passphrase == "" {
-		fmt.Println("passphrase must not be empty")
+	_, err := flags.Parse(&opts)
+	if err != nil {
 		os.Exit(1)
 	}
 
-	filenames := flag.Args()
-
-	if len(filenames) == 0 {
-		usage()
-	}
-
-	for _, filename := range filenames {
+	for _, filename := range opts.Positional.Files {
 		plaintext, err := ioutil.ReadFile(filename)
 		if err != nil {
 			log.Fatalln(err)
 		}
 
-		ciphertext, err := cryptdo.Encrypt(plaintext, *passphrase)
+		ciphertext, err := cryptdo.Encrypt(plaintext, opts.Passphrase)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -49,9 +48,4 @@ func main() {
 	fmt.Println()
 	fmt.Println("Please make sure you have the encryption key stored safely and then")
 	fmt.Println("delete the original files.")
-}
-
-func usage() {
-	fmt.Println("usage: cryptdo-bootstrap -passphrase PASSPHRASE FILES...")
-	os.Exit(1)
 }

@@ -1,49 +1,43 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 
+	flags "github.com/jessevdk/go-flags"
+
 	"github.com/xoebus/cryptdo"
 )
 
-var old = flag.String("old", "", "old passphrase for file encryption")
-var new = flag.String("new", "", "new passphrase for file encryption")
+var opts struct {
+	Old string `short:"o" long:"old-passphrase" description:"old passphrase for file encryption" required:"true"`
+	New string `short:"n" long:"new-passphrase" description:"new passphrase for file encryption" required:"true"`
+
+	Positional struct {
+		Files []string `positional-arg-name:"FILE" required:"true"`
+	} `positional-args:"yes"`
+}
 
 func main() {
-	flag.Parse()
-
-	if *old == "" {
-		fmt.Println("old passphrase must not be empty")
+	_, err := flags.Parse(&opts)
+	if err != nil {
 		os.Exit(1)
 	}
 
-	if *new == "" {
-		fmt.Println("new passphrase must not be empty")
-		os.Exit(1)
-	}
-
-	filenames := flag.Args()
-
-	if len(filenames) == 0 {
-		usage()
-	}
-
-	for _, filename := range filenames {
+	for _, filename := range opts.Positional.Files {
 		oldText, err := ioutil.ReadFile(filename)
 		if err != nil {
 			log.Fatalln(err)
 		}
 
-		plaintext, err := cryptdo.Decrypt(oldText, *old)
+		plaintext, err := cryptdo.Decrypt(oldText, opts.Old)
 		if err != nil {
 			log.Fatalln(err)
 		}
 
-		newText, err := cryptdo.Encrypt(plaintext, *new)
+		newText, err := cryptdo.Encrypt(plaintext, opts.New)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -60,9 +54,4 @@ func main() {
 
 		fmt.Println(filename, "has been re-keyed")
 	}
-}
-
-func usage() {
-	fmt.Println("usage: cryptdo-rekey -old OLD-PASSPHRASE -new NEW-PASSPHRASE FILES...")
-	os.Exit(1)
 }

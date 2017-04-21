@@ -1,8 +1,6 @@
 package main
 
 import (
-	"flag"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -10,33 +8,34 @@ import (
 	"path/filepath"
 	"strings"
 
+	flags "github.com/jessevdk/go-flags"
+
 	"github.com/xoebus/cryptdo"
 )
 
-var passphrase = flag.String("passphrase", "", "passphrase for file encryption")
+var opts struct {
+	Passphrase string `short:"p" long:"passphrase" description:"passphrase for file encryption" required:"true"`
+
+	Positional struct {
+		Command string   `positional-arg-name:"COMMAND" required:"true"`
+		Args    []string `positional-arg-name:"ARG"`
+	} `positional-args:"yes"`
+}
 
 func main() {
-	flag.Parse()
-
-	if *passphrase == "" {
-		fmt.Println("passphrase must not be empty")
+	_, err := flags.Parse(&opts)
+	if err != nil {
 		os.Exit(1)
 	}
 
-	command := flag.Args()
-	if len(command) < 1 {
-		usage()
-	}
-
 	encryptedFiles, _ := filepath.Glob("*.enc")
-
 	for _, file := range encryptedFiles {
 		ciphertext, err := ioutil.ReadFile(file)
 		if err != nil {
 			log.Fatalln(err)
 		}
 
-		plaintext, err := cryptdo.Decrypt(ciphertext, *passphrase)
+		plaintext, err := cryptdo.Decrypt(ciphertext, opts.Passphrase)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -47,7 +46,7 @@ func main() {
 		}
 	}
 
-	cmd := exec.Command(command[0], command[1:]...)
+	cmd := exec.Command(opts.Positional.Command, opts.Positional.Args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
@@ -61,7 +60,7 @@ func main() {
 			log.Fatalln(err)
 		}
 
-		ciphertext, err := cryptdo.Encrypt(plaintext, *passphrase)
+		ciphertext, err := cryptdo.Encrypt(plaintext, opts.Passphrase)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -84,9 +83,4 @@ func main() {
 
 func decryptedName(file string) string {
 	return file[:strings.LastIndex(file, ".enc")]
-}
-
-func usage() {
-	fmt.Println("usage: cryptdo -passphrase PASSPHRASE -- command ...")
-	os.Exit(1)
 }

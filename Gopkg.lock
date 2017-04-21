@@ -1,4 +1,4 @@
-memo = "9f16832a7608f8d508a09f23793d2af7eff7eb874bea42e54b3fed0ac46d2586"
+memo = "112ba594417d868cb491539269f8979b44e87e15ceb8242721dff46945ec8648"
 
 [[projects]]
   branch = "master"
@@ -7,7 +7,13 @@ memo = "9f16832a7608f8d508a09f23793d2af7eff7eb874bea42e54b3fed0ac46d2586"
   revision = "2bba0603135d7d7f5cb73b2125beeda19c09f4ef"
 
 [[projects]]
+  name = "github.com/jessevdk/go-flags"
+  packages = ["."]
+  revision = "48cf8722c3375517aba351d1f7577c40663a4407"
+  version = "v1.2.0"
+
+[[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["pbkdf2"]
-  revision = "cbc3d0884eac986df6e78a039b8792e869bff863"
+  revision = "96846453c37f0876340a66a47f3f75b1f3a6cd2d"
