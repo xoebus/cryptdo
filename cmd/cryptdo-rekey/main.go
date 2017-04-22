@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
 
 	flags "github.com/jessevdk/go-flags"
 
@@ -14,10 +15,6 @@ import (
 var opts struct {
 	Old string `short:"o" long:"old-passphrase" description:"old passphrase for file encryption" required:"true"`
 	New string `short:"n" long:"new-passphrase" description:"new passphrase for file encryption" required:"true"`
-
-	Positional struct {
-		Files []string `positional-arg-name:"FILE" required:"true"`
-	} `positional-args:"yes"`
 }
 
 func main() {
@@ -26,7 +23,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	for _, filename := range opts.Positional.Files {
+	encryptedFiles, _ := filepath.Glob("*.enc")
+
+	for _, filename := range encryptedFiles {
 		oldText, err := ioutil.ReadFile(filename)
 		if err != nil {
 			log.Fatalln(err)

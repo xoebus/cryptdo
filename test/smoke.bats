@@ -45,7 +45,7 @@ teardown() {
   cryptdo-bootstrap --passphrase "one" input.txt
   rm input.txt
 
-  cryptdo-rekey --old-passphrase "one" --new-passphrase "two" input.txt.enc
+  cryptdo-rekey --old-passphrase "one" --new-passphrase "two"
 
   run cryptdo --passphrase "two" -- cat input.txt
   [ "$status" -eq 0 ]
@@ -58,7 +58,7 @@ teardown() {
   cryptdo-bootstrap --passphrase "correct" input.txt
   rm input.txt
 
-  run cryptdo-rekey --old-passphrase "wrong" --new-passphrase "does not matter" input.txt.enc
+  run cryptdo-rekey --old-passphrase "wrong" --new-passphrase "does not matter"
   [ "$status" -eq 1 ]
 }
 
