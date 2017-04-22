@@ -12,7 +12,7 @@ import (
 )
 
 var opts struct {
-	Passphrase string `short:"p" long:"passphrase" description:"passphrase for file encryption" required:"true"`
+	Passphrase string `short:"p" long:"passphrase" description:"passphrase for file encryption"`
 
 	Positional struct {
 		Files []string `positional-arg-name:"FILE" required:"true"`
@@ -25,13 +25,15 @@ func main() {
 		os.Exit(1)
 	}
 
+	pass := passphrase()
+
 	for _, filename := range opts.Positional.Files {
 		plaintext, err := ioutil.ReadFile(filename)
 		if err != nil {
 			log.Fatalln(err)
 		}
 
-		ciphertext, err := cryptdo.Encrypt(plaintext, opts.Passphrase)
+		ciphertext, err := cryptdo.Encrypt(plaintext, pass)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -48,4 +50,17 @@ func main() {
 	fmt.Println()
 	fmt.Println("Please make sure you have the encryption key stored safely and then")
 	fmt.Println("delete the original files.")
+}
+
+func passphrase() string {
+	if opts.Passphrase != "" {
+		return opts.Passphrase
+	}
+
+	pass, err := cryptdo.ReadPassphrase("passphrase")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return pass
 }

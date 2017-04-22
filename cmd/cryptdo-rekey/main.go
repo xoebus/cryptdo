@@ -13,8 +13,8 @@ import (
 )
 
 var opts struct {
-	Old string `short:"o" long:"old-passphrase" description:"old passphrase for file encryption" required:"true"`
-	New string `short:"n" long:"new-passphrase" description:"new passphrase for file encryption" required:"true"`
+	Old string `short:"o" long:"old-passphrase" description:"old passphrase for file encryption"`
+	New string `short:"n" long:"new-passphrase" description:"new passphrase for file encryption" `
 }
 
 func main() {
@@ -22,6 +22,9 @@ func main() {
 	if err != nil {
 		os.Exit(1)
 	}
+
+	oldPassphrase := oldPass()
+	newPassphrase := newPass()
 
 	encryptedFiles, _ := filepath.Glob("*.enc")
 
@@ -31,12 +34,12 @@ func main() {
 			log.Fatalln(err)
 		}
 
-		plaintext, err := cryptdo.Decrypt(oldText, opts.Old)
+		plaintext, err := cryptdo.Decrypt(oldText, oldPassphrase)
 		if err != nil {
 			log.Fatalln(err)
 		}
 
-		newText, err := cryptdo.Encrypt(plaintext, opts.New)
+		newText, err := cryptdo.Encrypt(plaintext, newPassphrase)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -53,4 +56,30 @@ func main() {
 
 		fmt.Println(filename, "has been re-keyed")
 	}
+}
+
+func oldPass() string {
+	if opts.Old != "" {
+		return opts.Old
+	}
+
+	pass, err := cryptdo.ReadPassphrase("old")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return pass
+}
+
+func newPass() string {
+	if opts.New != "" {
+		return opts.New
+	}
+
+	pass, err := cryptdo.ReadPassphrase("new")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return pass
 }
