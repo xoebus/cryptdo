@@ -21,5 +21,9 @@ go_library(
 go_test(
     name = "go_default_test",
     srcs = ["crypto_test.go"],
-    deps = ["//:go_default_library"],
+    deps = [
+        "//:go_default_library",
+        "//proto:go_default_library",
+        "@com_github_golang_protobuf//proto:go_default_library",
+    ],
 )
