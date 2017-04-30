@@ -6,7 +6,6 @@ go_library(
     name = "go_default_library",
     srcs = [
         "crypto.go",
-        "fuzz.go",
         "passphrase.go",
     ],
     visibility = ["//visibility:public"],
