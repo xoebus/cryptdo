@@ -1,6 +1,20 @@
-language: go
+language: java
 
-go:
-- 1.x
+jdk:
+- oraclejdk8
 
-script: go test $(go list ./... | grep -v /vendor/)
+env:
+- BAZEL_VERSION=0.4.5
+
+before_install:
+- wget https://github.com/bazelbuild/bazel/archive/$BAZEL_VERSION.zip
+- unzip $BAZEL_VERSION.zip
+- cd bazel-$BAZEL_VERSION
+- ./compile.sh
+- sudo cp output/bazel /usr/bin/bazel
+- cd ..
+- rm -rf bazel-$BAZEL_VERSION
+
+script:
+- bazel build //...
+- bazel test //...
