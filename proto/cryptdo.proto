@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package cryptdo;
 
-option go_package = "cryptdopb";
+option go_package = "proto";
 
 message Message {
   // key derivation
