@@ -3,16 +3,11 @@ language: java
 jdk:
 - oraclejdk8
 
-env:
-- BAZEL_VERSION=0.4.5
-
 before_install:
+- echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
+- curl https://bazel.build/bazel-release.pub.gpg | sudo apt-key add -
 - sudo apt-get -y update
-- sudo apt-get -y install libstdc++6
-- wget https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
-- chmod +x bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
-- ./bazel-$BAZEL_VERSION-installer-linux-x86_64.sh --user
-- rm -rf bazel-$BAZEL_VERSION-installer-linux-x86_64.sh
+- sudo apt-get -y install bazel
 
 script:
 - bazel build //...
