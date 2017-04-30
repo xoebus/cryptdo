@@ -18,11 +18,15 @@ import (
 const (
 	// Key Derivation
 	iterations = 100000
-	saltSize   = 32
 
 	// Encryption
 	keySize   = 32
 	nonceSize = 12
+)
+
+var (
+	hashAlg  = sha512.New384
+	saltSize = hashAlg().Size()
 )
 
 var ErrEmptyMessage = errors.New("cryptdo: empty message")
@@ -93,7 +97,7 @@ func Decrypt(ciphertext []byte, passphrase string) ([]byte, error) {
 }
 
 func derivedKey(passphrase string, salt []byte, iters int) []byte {
-	return pbkdf2.Key([]byte(passphrase), salt, iters, keySize, sha512.New384)
+	return pbkdf2.Key([]byte(passphrase), salt, iters, keySize, hashAlg)
 }
 
 func randomBytes(count int) ([]byte, error) {
