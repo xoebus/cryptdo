@@ -19,7 +19,7 @@ go_library(
 )
 
 go_test(
-    name = "go_default_test",
+    name = "go_default_xtest",
     srcs = ["crypto_test.go"],
     deps = [
         "//:go_default_library",
