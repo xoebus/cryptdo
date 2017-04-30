@@ -40,11 +40,14 @@ Not yet!
 
 = development
 
-    $ go get github.com/xoebus/cryptdo
-    $ cd $GOPATH/src/github.com/xoebus/cryptdo
-    $ dep ensure
-    ...
-    $ go test ./...
+Bazel[1] is used to build and test the project.
+
+    $ bazel build //...
+    $ bazel test //...
+
+The compiled executables will be in bazel-bin/cmd/*.
+
+[1]: https://bazel.build/
 
 
 = cryptography
