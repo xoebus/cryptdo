@@ -18,11 +18,21 @@ go_library(
 )
 
 go_test(
-    name = "go_default_xtest",
+    name = "crypto",
     srcs = ["crypto_test.go"],
     deps = [
         "//:go_default_library",
         "//proto:go_default_library",
         "@com_github_golang_protobuf//proto:go_default_library",
     ],
+    size = "small",
+)
+
+go_test(
+    name = "roundtrip",
+    srcs = ["roundtrip_test.go"],
+    deps = [
+        "//:go_default_library",
+    ],
+    size = "medium",
 )

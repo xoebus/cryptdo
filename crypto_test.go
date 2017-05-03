@@ -1,35 +1,13 @@
 package cryptdo_test
 
 import (
-	"bytes"
 	"testing"
-	"testing/quick"
 
 	"github.com/golang/protobuf/proto"
 
 	"github.com/xoebus/cryptdo"
 	cryptdopb "github.com/xoebus/cryptdo/proto"
 )
-
-func TestRoundtrip(t *testing.T) {
-	roundtrip := func(plaintext []byte, passphrase string) bool {
-		ciphertext, err := cryptdo.Encrypt(plaintext, passphrase)
-		if err != nil {
-			return false
-		}
-
-		plain, err := cryptdo.Decrypt(ciphertext, passphrase)
-		if err != nil {
-			return false
-		}
-
-		return bytes.Equal(plaintext, plain)
-	}
-
-	if err := quick.Check(roundtrip, nil); err != nil {
-		t.Error(err)
-	}
-}
 
 func TestCurrentCrypto(t *testing.T) {
 	passphrase := "hunter2"
