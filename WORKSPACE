@@ -14,19 +14,19 @@ go_proto_repositories()
 
 go_repository(
     name = "com_github_golang_protobuf",
-    commit = "fec3b39b059c0f88fa6b20f5ed012b1aa203a8b4",
+    commit = "e325f446bebc2998605911c0a2650d9920361d4a",
     importpath = "github.com/golang/protobuf",
 )
 
 go_repository(
     name = "com_github_jessevdk_go_flags",
-    commit = "460c7bb0abd6e927f2767cadc91aa6ef776a98b4",
+    commit = "5695738f733662da3e9afc2283bba6f3c879002d",
     importpath = "github.com/jessevdk/go-flags",
 )
 
 go_repository(
     name = "org_golang_x_crypto",
-    commit = "0fe963104e9d1877082f8fb38f816fcd97eb1d10",
+    commit = "850760c427c516be930bc91280636328f1a62286",
     importpath = "golang.org/x/crypto",
 )
 
