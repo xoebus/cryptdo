@@ -8,7 +8,7 @@ import (
 
 	flags "github.com/jessevdk/go-flags"
 
-	"github.com/xoebus/cryptdo"
+	"code.xoeb.us/cryptdo"
 )
 
 var opts struct {

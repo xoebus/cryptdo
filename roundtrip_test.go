@@ -5,7 +5,7 @@ import (
 	"testing"
 	"testing/quick"
 
-	"github.com/xoebus/cryptdo"
+	"code.xoeb.us/cryptdo"
 )
 
 func TestRoundtrip(t *testing.T) {

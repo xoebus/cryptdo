@@ -4,18 +4,18 @@ WORKDIR=$BATS_TMPDIR/cryptdo
 PATH=$WORKDIR:$PATH
 
 setup() {
-  rm -rf $$WORKDIR
-  mkdir -p $WORKDIR
+  rm -rf "$WORKDIR"
+  mkdir -p "$WORKDIR"
 
-  go build -o $WORKDIR/cryptdo github.com/xoebus/cryptdo/cmd/cryptdo
-  go build -o $WORKDIR/cryptdo-bootstrap github.com/xoebus/cryptdo/cmd/cryptdo-bootstrap
-  go build -o $WORKDIR/cryptdo-rekey github.com/xoebus/cryptdo/cmd/cryptdo-rekey
+  go build -o "$WORKDIR"/cryptdo code.xoeb.us/cryptdo/cmd/cryptdo
+  go build -o "$WORKDIR"/cryptdo-bootstrap code.xoeb.us/cryptdo/cmd/cryptdo-bootstrap
+  go build -o "$WORKDIR"/cryptdo-rekey code.xoeb.us/cryptdo/cmd/cryptdo-rekey
 
-  cd $WORKDIR
+  cd "$WORKDIR"
 }
 
 teardown() {
-  rm -rf $WORKDIR
+  rm -rf "$WORKDIR"
 }
 
 @test "an encryption roundtrip" {

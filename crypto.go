@@ -12,7 +12,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"golang.org/x/crypto/pbkdf2"
 
-	cryptdopb "github.com/xoebus/cryptdo/proto"
+	cryptdopb "code.xoeb.us/cryptdo/proto"
 )
 
 const (
