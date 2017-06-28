@@ -36,3 +36,16 @@ go_test(
     ],
     size = "medium",
 )
+
+load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
+
+pkg_tar(
+    name = "cryptdo",
+    extension = "tgz",
+    files = [
+        "//cmd/cryptdo:cryptdo",
+        "//cmd/cryptdo-rekey:cryptdo-rekey",
+        "//cmd/cryptdo-bootstrap:cryptdo-bootstrap",
+    ],
+    mode = "0755",
+)
