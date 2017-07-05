@@ -7,6 +7,7 @@ go_library(
     srcs = [
         "crypto.go",
         "passphrase.go",
+        "versions.go",
     ],
     visibility = ["//visibility:public"],
     deps = [
