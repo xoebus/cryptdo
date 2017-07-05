@@ -8,7 +8,7 @@ import (
 	"golang.org/x/crypto/ssh/terminal"
 )
 
-var ErrEmptyPassphase = errors.New("passphrase must not be empty")
+var ErrEmptyPassphase = errors.New("cryptdo: passphrase must not be empty")
 
 func ReadPassphrase(prompt string) (string, error) {
 	fmt.Printf("%s: ", prompt)
