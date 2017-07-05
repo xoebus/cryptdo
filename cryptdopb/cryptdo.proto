@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package cryptdo;
+
+option go_package = "cryptdopb";
+
+message Message {
+  // crypto version
+  int32 version = 1;
+
+  // ciphertext
+  bytes salt = 2;
+  bytes nonce = 3;
+  bytes ciphertext = 4;
+}

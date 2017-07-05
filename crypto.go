@@ -12,10 +12,12 @@ import (
 	"github.com/golang/protobuf/proto"
 	"golang.org/x/crypto/pbkdf2"
 
-	cryptdopb "code.xoeb.us/cryptdo/proto"
+	"code.xoeb.us/cryptdo/cryptdopb"
 )
 
 const (
+	currentVersion = 1
+
 	// Key Derivation
 	iterations = 100000
 
@@ -56,7 +58,7 @@ func Encrypt(plaintext []byte, passphrase string) ([]byte, error) {
 	ciphertext := aesgcm.Seal(nil, nonce, plaintext, nil)
 
 	message := &cryptdopb.Message{
-		Iterations: iterations,
+		Version:    currentVersion,
 		Salt:       salt,
 		Nonce:      nonce,
 		Ciphertext: ciphertext,
@@ -75,7 +77,7 @@ func Decrypt(ciphertext []byte, passphrase string) ([]byte, error) {
 		return nil, err
 	}
 
-	key := derivedKey(passphrase, message.Salt, int(message.Iterations))
+	key := derivedKey(passphrase, message.Salt, iterations)
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err

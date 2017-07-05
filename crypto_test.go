@@ -6,7 +6,7 @@ import (
 	"github.com/golang/protobuf/proto"
 
 	"code.xoeb.us/cryptdo"
-	cryptdopb "code.xoeb.us/cryptdo/proto"
+	"code.xoeb.us/cryptdo/cryptdopb"
 )
 
 func TestCurrentCrypto(t *testing.T) {
@@ -23,11 +23,7 @@ func TestCurrentCrypto(t *testing.T) {
 		t.Error("got error while unmarshaling", err)
 	}
 
-	if iterations := message.GetIterations(); iterations != 100000 {
-		t.Errorf("iterations was incorrect, got: %d, want: %d", iterations, 100000)
-	}
-
-	if salt := message.GetSalt(); len(salt) != 48 {
-		t.Errorf("salt length was incorrect, got: %d, want: %d", len(salt), 48)
+	if version := message.GetVersion(); version != 1 {
+		t.Errorf("version was incorrect, got: %d, want: %d", version, 1)
 	}
 }
