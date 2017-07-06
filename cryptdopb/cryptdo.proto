@@ -4,11 +4,44 @@ package cryptdo;
 
 option go_package = "cryptdopb";
 
+// The Message object is serialized into a the complete ciphertext message by
+// cryptdo. This includes the ciphertext of the message but also any related
+// information about key derivation or nonces required in the encryption.
 message Message {
-  // crypto version
+  // The version of the cryptographic primitives being used in this particular
+  // message. This field is included to allow for more recent versions of
+  // cryptdo to understand and decrypt files encrypted with an older version.
+  //
+  // # Version 1
+  //
+  // The first version of the cryptdo encryption used PBKDF2 to generate a key
+  // from the user's passphrase which is then used with AES-GCM to encrypt the
+  // plain text.
+  //
+  // The key is derived using PBKDF2-HMAC-SHA384 using 100,000 iterations using
+  // a random 32 byte salt. This salt is stored in the salt field (tag 2)
+  // below.
+  //
+  // The encryption is performed by using AES in GCM mode. This uses a random
+  // 12 byte nonce which is then stored in the nonce field (tag 3) below. The
+  // finished ciphertext is then stored in the ciphertext field (tag 4) below.
+  //
+  // Notes:
+  //
+  // 1) SHA384 is used in the key derivation because of the proliferation of
+  //    specialized hardware to attack SHA256 due to its use in Bitcoin.
+  //
+  // 2) The encryption key (derived from the user's passphrase) must be rotated
+  //    before 2^32 encryptions have taken place with a single key. Due to the
+  //    usage patterns of a tool like this it is unlikely that this limit will
+  //    be reached. However, you should bear this in mind before using the same
+  //    cryptographic primitives in your software.
   int32 version = 1;
 
-  // ciphertext
+  // The usage of these fields depends on the cryptographic version above.
+  // Please refer to the documentation for the version field for their usage in
+  // different versions. Their usage will hopefully not be suprising based on
+  // the names of the fields.
   bytes salt = 2;
   bytes nonce = 3;
   bytes ciphertext = 4;
