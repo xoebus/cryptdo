@@ -3,6 +3,7 @@ package cryptdo
 import (
 	"errors"
 	"fmt"
+	"os"
 	"syscall"
 
 	"golang.org/x/crypto/ssh/terminal"
@@ -11,7 +12,7 @@ import (
 var ErrEmptyPassphase = errors.New("cryptdo: passphrase must not be empty")
 
 func ReadPassphrase(prompt string) (string, error) {
-	fmt.Printf("%s: ", prompt)
+	fmt.Fprintf(os.Stderr, "%s: ", prompt)
 	defer fmt.Println()
 
 	input, err := terminal.ReadPassword(int(syscall.Stdin))
