@@ -28,6 +28,7 @@ func main() {
 		os.Exit(1)
 	}
 
+	failed := false
 	pass := passphrase()
 	encryptedFiles, _ := filepath.Glob("*.enc")
 
@@ -53,7 +54,8 @@ func main() {
 	cmd.Stderr = os.Stderr
 
 	if err := cmd.Run(); err != nil {
-		log.Fatalln(err)
+		failed = true
+		log.Println("cryptdo: command failed:", err)
 	}
 
 	for _, file := range encryptedFiles {
@@ -80,6 +82,10 @@ func main() {
 		if err = os.Remove(decryptedName(file)); err != nil {
 			log.Fatalln(err)
 		}
+	}
+
+	if failed {
+		os.Exit(1)
 	}
 }
 

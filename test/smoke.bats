@@ -39,6 +39,21 @@ setup() {
   [ "$output" = "Changed!" ]
 }
 
+@test "re-encrypts the files in a partial state even if the command fails" {
+  echo "I would like to encrypt this!" > input.txt
+
+  cryptdo-bootstrap --passphrase "password" input.txt
+  rm input.txt
+
+  run cryptdo --passphrase "password" -- bash -c "echo 'Changed!' > input.txt; exit 1"
+  [ "$status" -eq 1 ]
+
+  run cryptdo --passphrase "password" -- cat input.txt
+  [ "$status" -eq 0 ]
+  echo "$output"
+  [ "$output" = "Changed!" ]
+}
+
 @test "rekeying the files" {
   echo "I would like to encrypt this!" > input.txt
 
