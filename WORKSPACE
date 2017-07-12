@@ -3,7 +3,7 @@ workspace(name = "cryptdo")
 git_repository(
     name = "io_bazel_rules_go",
     remote = "https://github.com/bazelbuild/rules_go.git",
-    tag = "0.5.0",
+    tag = "0.5.1",
 )
 
 load("@io_bazel_rules_go//go:def.bzl", "go_repositories", "go_repository")
@@ -14,7 +14,7 @@ go_proto_repositories()
 
 go_repository(
     name = "com_github_golang_protobuf",
-    commit = "e325f446bebc2998605911c0a2650d9920361d4a",
+    commit = "0a4f71a498b7c4812f64969510bcb4eca251e33a",
     importpath = "github.com/golang/protobuf",
 )
 
@@ -26,7 +26,7 @@ go_repository(
 
 go_repository(
     name = "org_golang_x_crypto",
-    commit = "850760c427c516be930bc91280636328f1a62286",
+    commit = "dd85ac7e6a88fc6ca420478e934de5f1a42dd3c6",
     importpath = "golang.org/x/crypto",
 )
 
