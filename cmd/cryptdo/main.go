@@ -42,7 +42,7 @@ func main() {
 			log.Fatalln(err)
 		}
 
-		err = ioutil.WriteFile(decryptedName(file), plaintext, 0400)
+		err = ioutil.WriteFile(decryptedName(file), plaintext, 0600)
 		if err != nil {
 			log.Fatalln(err)
 		}

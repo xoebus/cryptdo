@@ -25,6 +25,20 @@ setup() {
   [ "$status" -eq 1 ]
 }
 
+@test "allows changes to decrypted files" {
+  echo "I would like to encrypt this!" > input.txt
+
+  cryptdo-bootstrap --passphrase "password" input.txt
+  rm input.txt
+
+  run cryptdo --passphrase "password" -- bash -c "echo 'Changed!' > input.txt"
+  [ "$status" -eq 0 ]
+
+  run cryptdo --passphrase "password" -- cat input.txt
+  [ "$status" -eq 0 ]
+  [ "$output" = "Changed!" ]
+}
+
 @test "rekeying the files" {
   echo "I would like to encrypt this!" > input.txt
 
