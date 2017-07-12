@@ -54,6 +54,16 @@ setup() {
   [ "$output" = "Changed!" ]
 }
 
+@test "exits with the exit status of the command" {
+  echo "I would like to encrypt this!" > input.txt
+
+  cryptdo-bootstrap --passphrase "password" input.txt
+  rm input.txt
+
+  run cryptdo --passphrase "password" -- bash -c "exit 28"
+  [ "$status" -eq 28 ]
+}
+
 @test "rekeying the files" {
   echo "I would like to encrypt this!" > input.txt
 

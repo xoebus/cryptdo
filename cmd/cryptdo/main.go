@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"syscall"
 
 	flags "github.com/jessevdk/go-flags"
 
@@ -28,7 +29,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	failed := false
 	pass := passphrase()
 	encryptedFiles, _ := filepath.Glob("*.enc")
 
@@ -53,10 +53,7 @@ func main() {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	if err := cmd.Run(); err != nil {
-		failed = true
-		log.Println("cryptdo: command failed:", err)
-	}
+	exitStatus := run(cmd)
 
 	for _, file := range encryptedFiles {
 		plaintext, err := ioutil.ReadFile(decryptedName(file))
@@ -84,9 +81,7 @@ func main() {
 		}
 	}
 
-	if failed {
-		os.Exit(1)
-	}
+	os.Exit(exitStatus)
 }
 
 func decryptedName(file string) string {
@@ -104,4 +99,20 @@ func passphrase() string {
 	}
 
 	return pass
+}
+
+func run(cmd *exec.Cmd) (status int) {
+	if err := cmd.Run(); err != nil {
+		log.Println("cryptdo: command failed:", err)
+
+		if exiterr, ok := err.(*exec.ExitError); ok {
+			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
+				return status.ExitStatus()
+			}
+		}
+
+		return 1
+	}
+
+	return 0
 }
