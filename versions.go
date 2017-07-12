@@ -19,24 +19,22 @@ type version interface {
 var (
 	sha384 = sha512.New384
 
-	versions map[int32]version = map[int32]version{
-		1: &version1{
-			iterations: 100000,
-			hashAlg:    sha384,
-			saltSize:   sha384().Size(),
-			keySize:    32,
-			nonceSize:  12,
-		},
+	v1 = &version1{
+		iterations: 100000,
+		hashAlg:    sha384,
+		saltSize:   sha384().Size(),
+		keySize:    32,
+		nonceSize:  12,
 	}
 )
 
 func lookup(vers int32) (version, error) {
-	v, ok := versions[vers]
-	if !ok {
+	switch vers {
+	case 1:
+		return v1, nil
+	default:
 		return nil, &UnknownVersionError{version: int(vers)}
 	}
-
-	return v, nil
 }
 
 type version1 struct {
