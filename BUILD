@@ -20,12 +20,16 @@ go_library(
 
 go_test(
     name = "crypto",
-    srcs = ["crypto_test.go"],
+    srcs = [
+        "crypto_test.go",
+        "versions_test.go",
+    ],
     deps = [
         "//:go_default_library",
         "//cryptdopb:go_default_library",
         "@com_github_golang_protobuf//proto:go_default_library",
     ],
+    data = glob(["testdata/**"]),
     size = "small",
 )
 
