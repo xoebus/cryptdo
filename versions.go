@@ -32,9 +32,9 @@ func lookup(vers int32) (version, bool) {
 	switch vers {
 	case 1:
 		return v1, true
-	default:
-		return nil, false
 	}
+
+	return nil, false
 }
 
 type version1 struct {
