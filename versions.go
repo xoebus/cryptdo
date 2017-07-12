@@ -28,12 +28,12 @@ var (
 	}
 )
 
-func lookup(vers int32) (version, error) {
+func lookup(vers int32) (version, bool) {
 	switch vers {
 	case 1:
-		return v1, nil
+		return v1, true
 	default:
-		return nil, &UnknownVersionError{version: int(vers)}
+		return nil, false
 	}
 }
 

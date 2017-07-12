@@ -27,11 +27,9 @@ var ErrEmptyMessage = errors.New("cryptdo: empty message")
 // plaintext into memory. Therefore it is recommended to only use this for
 // smaller plaintexts.
 func Encrypt(plaintext []byte, passphrase string) ([]byte, error) {
-	// Encryption always uses the current cryptography version.
-	v, err := lookup(currentVersion)
-	if err != nil {
-		return nil, err
-	}
+	// Encryption always uses the current cryptography version. Which (unless
+	// something has gone horrifically wrong) will always be found.
+	v, _ := lookup(currentVersion)
 
 	message, err := v.encrypt(plaintext, passphrase)
 	if err != nil {
@@ -62,9 +60,9 @@ func Decrypt(ciphertext []byte, passphrase string) ([]byte, error) {
 		return nil, err
 	}
 
-	v, err := lookup(message.GetVersion())
-	if err != nil {
-		return nil, err
+	v, found := lookup(message.GetVersion())
+	if !found {
+		return nil, &UnknownVersionError{message.GetVersion()}
 	}
 
 	return v.decrypt(&message, passphrase)
@@ -98,7 +96,7 @@ func (i *InvalidNonceError) Error() string {
 // version to understand. This will often be caused by a mismatch between two
 // cryptography versions operating on the same data.
 type UnknownVersionError struct {
-	version int
+	version int32
 }
 
 func (u *UnknownVersionError) Error() string {
