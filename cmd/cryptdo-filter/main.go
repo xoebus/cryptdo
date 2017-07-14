@@ -31,12 +31,12 @@ func main() {
 	var output []byte
 
 	switch opts.Direction {
-	case "clean":
+	case "smudge":
 		output, err = cryptdo.Decrypt(input, pass)
 		if err != nil {
 			log.Fatalln(err)
 		}
-	case "smudge":
+	case "clean":
 		output, err = cryptdo.Encrypt(input, pass)
 		if err != nil {
 			log.Fatalln(err)
