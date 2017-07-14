@@ -51,6 +51,7 @@ pkg_tar(
         "//cmd/cryptdo:cryptdo",
         "//cmd/cryptdo-rekey:cryptdo-rekey",
         "//cmd/cryptdo-bootstrap:cryptdo-bootstrap",
+        "//cmd/cryptdo-filter:cryptdo-filter",
     ],
     mode = "0755",
 )
