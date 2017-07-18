@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/sha256"
 	"io/ioutil"
 	"log"
 	"os"
@@ -32,6 +33,8 @@ func main() {
 	pass := passphrase()
 	encryptedFiles, _ := filepath.Glob("*.enc")
 
+	fingerprints := make(map[string][32]byte)
+
 	for _, file := range encryptedFiles {
 		ciphertext, err := ioutil.ReadFile(file)
 		if err != nil {
@@ -42,6 +45,8 @@ func main() {
 		if err != nil {
 			log.Fatalln(err)
 		}
+
+		fingerprints[file] = fingerprint(plaintext)
 
 		err = ioutil.WriteFile(decryptedName(file), plaintext, 0600)
 		if err != nil {
@@ -59,6 +64,10 @@ func main() {
 		plaintext, err := ioutil.ReadFile(decryptedName(file))
 		if err != nil {
 			log.Fatalln(err)
+		}
+
+		if fingerprint(plaintext) == fingerprints[file] {
+			continue
 		}
 
 		ciphertext, err := cryptdo.Encrypt(plaintext, pass)
@@ -115,4 +124,8 @@ func run(cmd *exec.Cmd) (status int) {
 	}
 
 	return 0
+}
+
+func fingerprint(contents []byte) [32]byte {
+	return sha256.Sum256(contents)
 }

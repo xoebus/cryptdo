@@ -87,3 +87,18 @@ setup() {
   [ "$status" -eq 1 ]
 }
 
+@test "it does not re-encrypt the file if the contents does not change" {
+  echo "I would like to encrypt this!" > input.txt
+
+  cryptdo-bootstrap --passphrase "password" input.txt
+  rm input.txt
+
+  before=$(shasum input.txt.enc)
+
+  run cryptdo --passphrase "password" -- true # doesn't affect the file
+  [ "$status" -eq 0 ]
+
+  after=$(shasum input.txt.enc)
+
+  [ "$before" = "$after" ]
+}
