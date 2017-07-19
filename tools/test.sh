@@ -16,10 +16,6 @@ verify_dependencies() {
   check_installed bats
 }
 
-distro() {
-  uname | downcase
-}
-
 run_tests() {
   bazel test //...
 
