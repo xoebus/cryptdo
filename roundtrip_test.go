@@ -9,6 +9,10 @@ import (
 )
 
 func TestRoundtrip(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping roundtrip test in short mode")
+	}
+
 	roundtrip := func(plaintext []byte, passphrase string) bool {
 		ciphertext, err := cryptdo.Encrypt(plaintext, passphrase)
 		if err != nil {
