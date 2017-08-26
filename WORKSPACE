@@ -6,7 +6,7 @@ git_repository(
     tag = "0.5.3",
 )
 
-load("@io_bazel_rules_go//go:def.bzl", "go_repositories", "go_repository")
+load("@io_bazel_rules_go//go:def.bzl", "gazelle", "go_repositories", "go_repository")
 go_repositories()
 
 load("@io_bazel_rules_go//proto:go_proto_library.bzl", "go_proto_repositories")
