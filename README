@@ -47,6 +47,12 @@ Bazel[1] is used to build and test the project.
 
 The compiled executables will be in bazel-bin/cmd/*.
 
+== Why Bazel?
+
+It's important to me that a user can build a byte for byte replica of the
+distributed binaries. This requirement is doubly important when using security
+software.
+
 [1]: https://bazel.build/
 
 
