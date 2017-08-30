@@ -39,14 +39,19 @@ build_release() {
 
   BAZEL_BIN=$(bazel info bazel-bin)
   RELEASE_DIR=$(mktemp -d)
+  RELEASE_TGZ="cryptdo-$(distro)-$VERSION.tgz"
+  RELEASE_SHA="$RELEASE_TGZ.sha256"
+  RELEASE_SIG="$RELEASE_SHA.sig"
+  COMMENT="untrusted comment: verify with cryptdo.pub"
 
-  cp "$BAZEL_BIN/cryptdo.tgz" "$RELEASE_DIR/cryptdo-$(distro)-$VERSION.tgz"
+  cp "$BAZEL_BIN/cryptdo.tgz" "$RELEASE_DIR/$RELEASE_TGZ"
 
   pushd "$RELEASE_DIR" >/dev/null
-    sha256 "cryptdo-$(distro)-$VERSION.tgz" > SHA256
-    signify -S -e -s "$SIGNIFY_SECKEY" -m SHA256 -x SHA256.sig
-    rm SHA256
-    signify -C -p "$SIGNIFY_PUBKEY" -x SHA256.sig
+    sha256 "$RELEASE_TGZ" > "$RELEASE_SHA"
+    signify -S -e -s "$SIGNIFY_SECKEY" -m "$RELEASE_SHA" -x "$RELEASE_SIG"
+    sed -i '' "1s/.*/$COMMENT/" "$RELEASE_SIG"
+    rm "$RELEASE_SHA"
+    signify -C -p "$SIGNIFY_PUBKEY" -x "$RELEASE_SIG"
   popd >/dev/null
 
   git tag -a "$VERSION" -m "version $VERSION"
