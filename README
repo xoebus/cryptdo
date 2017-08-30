@@ -35,7 +35,20 @@ friend.
 
 = installation
 
-Not yet!
+1. Download the latest release and signature for your architecture from the
+   GitHub releases page.
+
+2. Cryptdo uses OpenBSD's signify to sign its releases. You can get my public
+   key for this project from: https://xoeb.us/keys/cryptdo.pub
+
+3. Verify the release with the command:
+
+     signify -C -p "path/to/public/key" -x "path/to/signature/file"
+
+   The signature file and the release tarball need to be in the same directory.
+
+4. If the signature matches then you can un-tar the release and copy the
+   binaries inside on to your path.
 
 
 = development
