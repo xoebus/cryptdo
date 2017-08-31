@@ -18,19 +18,19 @@ The usage will show how this can be useful.
 
 First, you need to bootstrap the encryption by encrypting your sensitive files.
 
-    $ cryptdo-boostrap -passphrase hunter2 terraform.tfstate
+    $ cryptdo-boostrap --passphrase hunter2 terraform.tfstate
     $ rm terraform.tfstate
 
 Next, you can run commands which need to access those files by decorating them with
 cryptdo. This will decrypt the file, run the command, and then re-encrypt the file with
 any changes.
 
-    $ cryptdo -passphrase hunter2 -- terraform apply
+    $ cryptdo --passphrase hunter2 -- terraform apply
 
 If you need to change the key of your encrypted files then the following command is your
 friend.
 
-    $ cryptdo-rekey -old hunter2 -new abetterkey
+    $ cryptdo-rekey --old hunter2 --new abetterkey
 
 
 = installation
