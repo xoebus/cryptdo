@@ -102,3 +102,14 @@ setup() {
 
   [ "$before" = "$after" ]
 }
+
+@test "it deletes the encrypted file after it's done" {
+  echo "I would like to encrypt this!" > input.txt
+
+  cryptdo-bootstrap --passphrase "password" input.txt
+  rm input.txt
+
+  run cryptdo --passphrase "password" -- cat input.txt
+
+  [ ! -f input.txt ]
+}

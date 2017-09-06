@@ -66,23 +66,26 @@ func main() {
 			log.Fatalln(err)
 		}
 
-		if fingerprint(plaintext) == fingerprints[file] {
-			continue
+		needsEncrypt := false
+		if fingerprint(plaintext) != fingerprints[file] {
+			needsEncrypt = true
 		}
 
-		ciphertext, err := cryptdo.Encrypt(plaintext, pass)
-		if err != nil {
-			log.Fatalln(err)
-		}
+		if needsEncrypt {
+			ciphertext, err := cryptdo.Encrypt(plaintext, pass)
+			if err != nil {
+				log.Fatalln(err)
+			}
 
-		newPath := file + ".new"
-		err = ioutil.WriteFile(newPath, ciphertext, 0400)
-		if err != nil {
-			log.Fatalln(err)
-		}
+			newPath := file + ".new"
+			err = ioutil.WriteFile(newPath, ciphertext, 0400)
+			if err != nil {
+				log.Fatalln(err)
+			}
 
-		if err = os.Rename(newPath, file); err != nil {
-			log.Fatalln(err)
+			if err = os.Rename(newPath, file); err != nil {
+				log.Fatalln(err)
+			}
 		}
 
 		if err = os.Remove(decryptedName(file)); err != nil {
