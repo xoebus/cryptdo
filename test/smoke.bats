@@ -113,3 +113,17 @@ setup() {
 
   [ ! -f input.txt ]
 }
+
+@test "it reads from stdin" {
+  echo "I would like to encrypt this!" > input.txt
+
+  cryptdo-bootstrap --passphrase "password" input.txt
+  rm input.txt
+
+  run bash -c 'set -e; echo "New encrypted stuff" | cryptdo --passphrase "password" -- bash -c "cat - > input.txt"'
+  [ "$status" -eq 0 ]
+
+  run cryptdo --passphrase "password" -- cat input.txt
+  [ "$status" -eq 0 ]
+  [ "$output" = "New encrypted stuff" ]
+}
