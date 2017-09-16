@@ -55,6 +55,7 @@ func main() {
 	}
 
 	cmd := exec.Command(opts.Positional.Command, opts.Positional.Args...)
+	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
