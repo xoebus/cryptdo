@@ -20,12 +20,12 @@ go_repository(
 
 go_repository(
     name = "org_golang_x_crypto",
-    commit = "81e90905daefcd6fd217b62423c0908922eadb30",
+    commit = "7d9177d70076375b9a59c8fde23d52d9c4a7ecd5",
     importpath = "golang.org/x/crypto",
 )
 
 go_repository(
     name = "org_golang_x_sys",
-    commit = "2d6f6f883a06fc0d5f4b14a81e4c28705ea64c15",
+    commit = "062cd7e4e68206d8bab9b18396626e855c992658",
     importpath = "golang.org/x/sys",
 )
