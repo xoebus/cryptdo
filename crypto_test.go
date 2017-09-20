@@ -1,11 +1,10 @@
-package cryptdo_test
+package cryptdo
 
 import (
 	"testing"
 
 	"github.com/golang/protobuf/proto"
 
-	"code.xoeb.us/cryptdo"
 	"code.xoeb.us/cryptdo/cryptdopb"
 )
 
@@ -13,7 +12,7 @@ func TestCurrentCrypto(t *testing.T) {
 	passphrase := "hunter2"
 	plaintext := []byte("something secret")
 
-	ciphertext, err := cryptdo.Encrypt(plaintext, passphrase)
+	ciphertext, err := Encrypt(plaintext, passphrase)
 	if err != nil {
 		t.Error("got error while encrypting:", err)
 	}

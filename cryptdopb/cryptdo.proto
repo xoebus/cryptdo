@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package cryptdo;
 
-option go_package = "cryptdopb";
+option go_package = "code.xoeb.us/cryptdo/cryptdopb";
 
 // The Message object is serialized into a the complete ciphertext message by
 // cryptdo. This includes the ciphertext of the message but also any related

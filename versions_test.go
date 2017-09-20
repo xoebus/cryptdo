@@ -1,12 +1,10 @@
-package cryptdo_test
+package cryptdo
 
 import (
 	"bytes"
 	"io/ioutil"
 	"path/filepath"
 	"testing"
-
-	"code.xoeb.us/cryptdo"
 )
 
 const expectedPath = "testdata/encrypt-this.txt"
@@ -32,7 +30,7 @@ func TestOldVersions(t *testing.T) {
 			t.Errorf("failed to open encrypted data file (version %s): %s", version.version, err)
 		}
 
-		actual, err := cryptdo.Decrypt(ciphertext, version.passphrase)
+		actual, err := Decrypt(ciphertext, version.passphrase)
 		if err != nil {
 			t.Errorf("failed to decrypt (version %s): %s", version.version, err)
 		}
