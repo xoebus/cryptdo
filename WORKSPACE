@@ -12,6 +12,9 @@ go_rules_dependencies()
 go_register_toolchains()
 proto_register_toolchains()
 
+load("//:bats.bzl", "bats_repositories")
+bats_repositories()
+
 go_repository(
     name = "com_github_jessevdk_go_flags",
     commit = "6cf8f02b4ae8ba723ddc64dcfd403e530c06d927",

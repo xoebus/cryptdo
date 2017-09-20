@@ -1,0 +1,14 @@
+load("//:bats.bzl", "bats_test")
+
+bats_test(
+    name = "smoke",
+    size = "small",
+    srcs = [
+        "smoke.bats",
+    ],
+    bins = [
+        "//cmd/cryptdo",
+        "//cmd/cryptdo-bootstrap",
+        "//cmd/cryptdo-rekey",
+    ],
+)
