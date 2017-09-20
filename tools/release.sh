@@ -30,8 +30,7 @@ distro() {
 }
 
 run_tests() {
-  ROOT="$(git rev-parse --show-toplevel)"
-  "$ROOT"/tools/test.sh
+  bazel test //...
 }
 
 build_release() {

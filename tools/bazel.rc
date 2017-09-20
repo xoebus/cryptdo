@@ -1,0 +1,2 @@
+# show test failures inline
+test --test_output errors
