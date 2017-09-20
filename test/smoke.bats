@@ -4,6 +4,12 @@ setup() {
   cd $(mktemp -d)
 }
 
+teardown() {
+  tmpdir=$(pwd)
+  cd -
+  rm -rf $tmpdir
+}
+
 @test "an encryption roundtrip" {
   echo "I would like to encrypt this!" > input.txt
 
