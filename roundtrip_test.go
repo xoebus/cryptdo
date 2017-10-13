@@ -6,6 +6,10 @@ import (
 	"testing/quick"
 )
 
+var config = &quick.Config{
+	MaxCount: 5, // The encrypt/decrypt cycle is fairly slow.
+}
+
 func TestRoundtrip(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping roundtrip test in short mode")
@@ -25,7 +29,7 @@ func TestRoundtrip(t *testing.T) {
 		return bytes.Equal(plaintext, plain)
 	}
 
-	if err := quick.Check(roundtrip, nil); err != nil {
+	if err := quick.Check(roundtrip, config); err != nil {
 		t.Error(err)
 	}
 }
