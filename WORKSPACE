@@ -12,7 +12,7 @@ go_rules_dependencies()
 go_register_toolchains()
 proto_register_toolchains()
 
-load("//:bats.bzl", "bats_repositories")
+load("//tools:bats.bzl", "bats_repositories")
 bats_repositories()
 
 go_repository(

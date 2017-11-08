@@ -1,4 +1,4 @@
-load("//:bats.bzl", "bats_test")
+load("//tools:bats.bzl", "bats_test")
 
 bats_test(
     name = "smoke",
