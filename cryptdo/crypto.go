@@ -8,7 +8,7 @@ import (
 
 	"github.com/golang/protobuf/proto"
 
-	"code.xoeb.us/cryptdo/cryptdopb"
+	"code.xoeb.us/cryptdo/cryptdo/cryptdopb"
 )
 
 const currentVersion = 1

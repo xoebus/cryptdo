@@ -8,7 +8,7 @@ import (
 
 	"golang.org/x/crypto/pbkdf2"
 
-	"code.xoeb.us/cryptdo/cryptdopb"
+	"code.xoeb.us/cryptdo/cryptdo/cryptdopb"
 )
 
 type version interface {

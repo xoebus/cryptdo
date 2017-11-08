@@ -1,0 +1,22 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
+
+proto_library(
+    name = "cryptdopb_proto",
+    srcs = ["cryptdo.proto"],
+    visibility = ["//visibility:public"],
+)
+
+go_proto_library(
+    name = "cryptdopb_go_proto",
+    importpath = "code.xoeb.us/cryptdo/cryptdo/cryptdopb",
+    proto = ":cryptdopb_proto",
+    visibility = ["//visibility:public"],
+)
+
+go_library(
+    name = "go_default_library",
+    importpath = "code.xoeb.us/cryptdo/cryptdo/cryptdopb",
+    library = ":cryptdopb_go_proto",
+    visibility = ["//visibility:public"],
+)

@@ -5,7 +5,7 @@ import (
 
 	"github.com/golang/protobuf/proto"
 
-	"code.xoeb.us/cryptdo/cryptdopb"
+	"code.xoeb.us/cryptdo/cryptdo/cryptdopb"
 )
 
 func TestCurrentCrypto(t *testing.T) {
