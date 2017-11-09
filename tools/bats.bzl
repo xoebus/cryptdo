@@ -1,24 +1,16 @@
 BATS_REPOSITORY_BUILD_FILE = """
 package(default_visibility = [ "//visibility:public" ])
 
-exports_files([
-  "libexec/bats",
-])
-
-filegroup(
+sh_binary(
   name = "bats",
   srcs = ["libexec/bats"],
+  data = [
+    "libexec/bats-exec-suite",
+    "libexec/bats-exec-test",
+    "libexec/bats-format-tap-stream",
+    "libexec/bats-preprocess",
+  ],
 )
-
-# filegroup(
-#   name = "bats_tools",
-#   srcs = [
-#     "libexec/bats-exec-suite",
-#     "libexec/bats-exec-test",
-#     "libexec/bats-format-tap-stream",
-#     "libexec/bats-preprocess",
-#   ],
-# )
 """
 
 def bats_repositories(version="v0.4.0"):
@@ -31,53 +23,44 @@ def bats_repositories(version="v0.4.0"):
 
 BASH_TEMPLATE = """
 #!/usr/bin/env bash
+
 set -e
 
-BATS_BINS_PATH="{bats_bins_path}"
-
-for dir in ${{BATS_BINS_PATH//:/ }}; do
-  export PATH="$(dirname $PWD/$dir):$PATH"
-done
-
 export TMPDIR="$TEST_TMPDIR"
+export PATH="{bats_bins_path}":$PATH
 
 "{bats}" "{test_paths}"
 """
 
+def _dirname(path):
+  prefix, _, _ = path.rpartition("/")
+  return prefix.rstrip("/")
+
 def _bats_test_impl(ctx):
-  bats = ctx.file._bats
+  runfiles = ctx.runfiles(
+      files = ctx.files.srcs,
+      collect_data = True,
+  )
 
-  test_files = []
-  test_paths = []
-  for src in ctx.attr.srcs:
-    for file in src.files:
-      test_files.append(file)
-      test_paths.append(file.short_path)
+  tests = [f.short_path for f in ctx.files.srcs]
+  path = ["$PWD/" + _dirname(b.short_path) for b in ctx.files.deps]
 
-  bin_files = []
-  bin_dirs = []
-  for bin in ctx.attr.bins:
-    for bin_file in bin.files:
-      bin_files.append(bin_file)
-      bin_dirs.append(bin_file.short_path)
+  sep = ctx.configuration.host_path_separator
 
   ctx.file_action(
       output = ctx.outputs.executable,
       executable = True,
       content = BASH_TEMPLATE.format(
-          bats = bats.path,
-          test_paths = " ".join(test_paths),
-          bats_bins_path = ":".join(bin_dirs),
+          bats = ctx.executable._bats.short_path,
+          test_paths = " ".join(tests),
+          bats_bins_path = sep.join(path),
       ),
   )
 
-  runfiles = [bats] + test_files + bin_files
+  runfiles = runfiles.merge(ctx.attr._bats.default_runfiles)
 
-  return struct(
-      runfiles = ctx.runfiles(
-          files = runfiles,
-          collect_data = True,
-      ),
+  return DefaultInfo(
+      runfiles = runfiles,
   )
 
 bats_test = rule(
@@ -85,11 +68,9 @@ bats_test = rule(
         "srcs": attr.label_list(
             allow_files = True,
         ),
-        "bins": attr.label_list(),
+        "deps": attr.label_list(),
         "_bats": attr.label(
             default = Label("@bats//:bats"),
-            single_file = True,
-            allow_files = True,
             executable = True,
             cfg = "host",
         ),

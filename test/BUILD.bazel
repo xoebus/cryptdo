@@ -6,7 +6,7 @@ bats_test(
     srcs = [
         "smoke.bats",
     ],
-    bins = [
+    deps = [
         "//cryptdo/cmd/cryptdo",
         "//cryptdo/cmd/cryptdo-bootstrap",
         "//cryptdo/cmd/cryptdo-rekey",
