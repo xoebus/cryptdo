@@ -21,28 +21,28 @@ sha256() {
 verify_dependencies() {
   check_installed git
   check_installed bazel
-  check_installed bats
   check_installed signify
-}
-
-distro() {
-  uname | downcase
 }
 
 run_tests() {
   bazel test //...
 }
 
-build_release() {
-  bazel build //...
-
+setup_release() {
   BAZEL_BIN=$(bazel info bazel-bin)
   RELEASE_DIR=$(mktemp -d)
-  RELEASE_TGZ="cryptdo-$(distro)-$VERSION.tgz"
+}
+
+build_release() {
+  DISTRO="$1"
+
+  RELEASE_TGZ="cryptdo-$DISTRO-$VERSION.tgz"
   RELEASE_SHA="$RELEASE_TGZ.sha256"
   RELEASE_SIG="$RELEASE_SHA.sig"
   COMMENT="untrusted comment: verify with cryptdo.pub"
+  TOOLCHAIN="@io_bazel_rules_go//go/toolchain:${DISTRO}_amd64"
 
+  bazel build --experimental_platforms="$TOOLCHAIN" //:cryptdo.tgz
   cp "$BAZEL_BIN/cryptdo.tgz" "$RELEASE_DIR/$RELEASE_TGZ"
 
   pushd "$RELEASE_DIR" >/dev/null
@@ -68,7 +68,11 @@ show_instructions() {
 main() {
   verify_dependencies
   run_tests
-  build_release
+
+  setup_release
+  build_release linux
+  build_release darwin
+
   show_instructions
 }
 
