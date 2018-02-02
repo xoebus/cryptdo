@@ -18,6 +18,8 @@ var versions = []struct {
 }
 
 func TestOldVersions(t *testing.T) {
+	t.Parallel()
+
 	expected, err := ioutil.ReadFile(expectedPath)
 	if err != nil {
 		t.Errorf("failed to open expected data file: %s", err)

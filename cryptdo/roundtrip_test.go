@@ -11,6 +11,8 @@ var config = &quick.Config{
 }
 
 func TestRoundtrip(t *testing.T) {
+	t.Parallel()
+
 	if testing.Short() {
 		t.Skip("skipping roundtrip test in short mode")
 	}

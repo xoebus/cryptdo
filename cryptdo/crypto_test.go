@@ -9,6 +9,8 @@ import (
 )
 
 func TestCurrentCrypto(t *testing.T) {
+	t.Parallel()
+
 	passphrase := "hunter2"
 	plaintext := []byte("something secret")
 
