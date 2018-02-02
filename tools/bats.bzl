@@ -13,11 +13,11 @@ sh_binary(
 )
 """
 
-def bats_repositories(version="v0.4.0"):
+def bats_repositories():
     native.new_git_repository(
       name = "bats",
-      remote = "https://github.com/sstephenson/bats",
-      tag = version,
+      remote = "https://github.com/bats-core/bats-core",
+      commit = "b1da565f92ad9dabf66831d0877542dcacc735b8",
       build_file_content = BATS_REPOSITORY_BUILD_FILE
     )
 
