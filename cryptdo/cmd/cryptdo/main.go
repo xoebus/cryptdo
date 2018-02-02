@@ -13,10 +13,12 @@ import (
 	flags "github.com/jessevdk/go-flags"
 
 	"code.xoeb.us/cryptdo/cryptdo"
+	"code.xoeb.us/cryptdo/cryptdo/internal/flag"
 )
 
 var opts struct {
-	Passphrase string `short:"p" long:"passphrase" description:"passphrase for file encryption"`
+	Passphrase string   `short:"p" long:"passphrase" description:"passphrase for file encryption"`
+	Extension  flag.Ext `short:"e" long:"extension" description:"extension to use for encrypted files" default:".enc"`
 
 	Positional struct {
 		Command string   `positional-arg-name:"COMMAND" required:"true"`
@@ -31,7 +33,9 @@ func main() {
 	}
 
 	pass := passphrase()
-	encryptedFiles, _ := filepath.Glob("*.enc")
+	ext := string(opts.Extension)
+
+	encryptedFiles, _ := filepath.Glob("*" + ext)
 
 	fingerprints := make(map[string][32]byte)
 
@@ -48,7 +52,7 @@ func main() {
 
 		fingerprints[file] = fingerprint(plaintext)
 
-		err = ioutil.WriteFile(decryptedName(file), plaintext, 0600)
+		err = ioutil.WriteFile(decryptedName(file, ext), plaintext, 0600)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -62,7 +66,7 @@ func main() {
 	exitStatus := run(cmd)
 
 	for _, file := range encryptedFiles {
-		plaintext, err := ioutil.ReadFile(decryptedName(file))
+		plaintext, err := ioutil.ReadFile(decryptedName(file, ext))
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -89,7 +93,7 @@ func main() {
 			}
 		}
 
-		if err = os.Remove(decryptedName(file)); err != nil {
+		if err = os.Remove(decryptedName(file, ext)); err != nil {
 			log.Fatalln(err)
 		}
 	}
@@ -97,8 +101,8 @@ func main() {
 	os.Exit(exitStatus)
 }
 
-func decryptedName(file string) string {
-	return file[:strings.LastIndex(file, ".enc")]
+func decryptedName(file, ext string) string {
+	return file[:strings.LastIndex(file, ext)]
 }
 
 func passphrase() string {
