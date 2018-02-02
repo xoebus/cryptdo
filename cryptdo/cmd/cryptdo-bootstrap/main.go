@@ -9,10 +9,12 @@ import (
 	flags "github.com/jessevdk/go-flags"
 
 	"code.xoeb.us/cryptdo/cryptdo"
+	"code.xoeb.us/cryptdo/cryptdo/internal/flag"
 )
 
 var opts struct {
-	Passphrase string `short:"p" long:"passphrase" description:"passphrase for file encryption"`
+	Passphrase string   `short:"p" long:"passphrase" description:"passphrase for file encryption"`
+	Extension  flag.Ext `short:"e" long:"extension" description:"extension to use for encrypted files" default:".enc"`
 
 	Positional struct {
 		Files []string `positional-arg-name:"FILE" required:"true"`
@@ -38,7 +40,7 @@ func main() {
 			log.Fatalln(err)
 		}
 
-		encPath := filename + ".enc"
+		encPath := filename + string(opts.Extension)
 		err = ioutil.WriteFile(encPath, ciphertext, 0400)
 		if err != nil {
 			log.Fatalln(err)

@@ -10,11 +10,14 @@ import (
 	flags "github.com/jessevdk/go-flags"
 
 	"code.xoeb.us/cryptdo/cryptdo"
+	"code.xoeb.us/cryptdo/cryptdo/internal/flag"
 )
 
 var opts struct {
 	Old string `short:"o" long:"old-passphrase" description:"old passphrase for file encryption"`
 	New string `short:"n" long:"new-passphrase" description:"new passphrase for file encryption" `
+
+	Extension flag.Ext `short:"e" long:"extension" description:"extension to use for encrypted files" default:".enc"`
 }
 
 func main() {
@@ -26,7 +29,7 @@ func main() {
 	oldPassphrase := oldPass()
 	newPassphrase := newPass()
 
-	encryptedFiles, _ := filepath.Glob("*.enc")
+	encryptedFiles, _ := filepath.Glob("*" + string(opts.Extension))
 
 	for _, filename := range encryptedFiles {
 		oldText, err := ioutil.ReadFile(filename)
