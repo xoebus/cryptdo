@@ -14,7 +14,6 @@ pkg_tar(
     srcs = [
         "//cryptdo/cmd/cryptdo",
         "//cryptdo/cmd/cryptdo-bootstrap",
-        "//cryptdo/cmd/cryptdo-filter",
         "//cryptdo/cmd/cryptdo-rekey",
     ],
     extension = "tgz",
