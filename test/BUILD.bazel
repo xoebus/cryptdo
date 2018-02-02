@@ -1,10 +1,10 @@
 load("//tools:bats.bzl", "bats_test")
 
 bats_test(
-    name = "smoke",
+    name = "core",
     size = "small",
     srcs = [
-        "smoke.bats",
+        "core.bats",
     ],
     deps = [
         "//cryptdo/cmd/cryptdo",
@@ -12,3 +12,30 @@ bats_test(
         "//cryptdo/cmd/cryptdo-rekey",
     ],
 )
+
+bats_test(
+    name = "ext",
+    size = "small",
+    srcs = [
+        "ext.bats",
+    ],
+    deps = [
+        "//cryptdo/cmd/cryptdo",
+        "//cryptdo/cmd/cryptdo-bootstrap",
+        "//cryptdo/cmd/cryptdo-rekey",
+    ],
+)
+
+bats_test(
+    name = "rekey",
+    size = "small",
+    srcs = [
+        "rekey.bats",
+    ],
+    deps = [
+        "//cryptdo/cmd/cryptdo",
+        "//cryptdo/cmd/cryptdo-bootstrap",
+        "//cryptdo/cmd/cryptdo-rekey",
+    ],
+)
+
