@@ -12,5 +12,4 @@ go_test(
     size = "small",
     srcs = ["ext_test.go"],
     embed = [":go_default_library"],
-    importpath = "code.xoeb.us/cryptdo/cryptdo/internal/flag",
 )

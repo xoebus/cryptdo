@@ -15,6 +15,5 @@ go_library(
 go_binary(
     name = "cryptdo-bootstrap",
     embed = [":go_default_library"],
-    importpath = "code.xoeb.us/cryptdo/cryptdo/cmd/cryptdo-bootstrap",
     visibility = ["//visibility:public"],
 )
