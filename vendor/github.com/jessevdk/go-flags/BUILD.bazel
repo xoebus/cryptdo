@@ -1,0 +1,80 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "arg.go",
+        "closest.go",
+        "command.go",
+        "completion.go",
+        "convert.go",
+        "error.go",
+        "flags.go",
+        "group.go",
+        "help.go",
+        "ini.go",
+        "man.go",
+        "multitag.go",
+        "option.go",
+        "parser.go",
+    ] + select({
+        "@io_bazel_rules_go//go/platform:android": [
+            "optstyle_other.go",
+            "termsize.go",
+            "termsize_other.go",
+        ],
+        "@io_bazel_rules_go//go/platform:darwin": [
+            "optstyle_other.go",
+            "termsize.go",
+            "termsize_unix.go",
+        ],
+        "@io_bazel_rules_go//go/platform:dragonfly": [
+            "optstyle_other.go",
+            "termsize.go",
+            "termsize_other.go",
+        ],
+        "@io_bazel_rules_go//go/platform:freebsd": [
+            "optstyle_other.go",
+            "termsize.go",
+            "termsize_unix.go",
+        ],
+        "@io_bazel_rules_go//go/platform:linux": [
+            "optstyle_other.go",
+            "termsize.go",
+            "termsize_linux.go",
+        ],
+        "@io_bazel_rules_go//go/platform:nacl": [
+            "optstyle_other.go",
+            "termsize.go",
+            "termsize_other.go",
+        ],
+        "@io_bazel_rules_go//go/platform:netbsd": [
+            "optstyle_other.go",
+            "termsize.go",
+            "termsize_unix.go",
+        ],
+        "@io_bazel_rules_go//go/platform:openbsd": [
+            "optstyle_other.go",
+            "termsize.go",
+            "termsize_unix.go",
+        ],
+        "@io_bazel_rules_go//go/platform:plan9": [
+            "optstyle_other.go",
+            "termsize_nosysioctl.go",
+            "termsize_other.go",
+        ],
+        "@io_bazel_rules_go//go/platform:solaris": [
+            "optstyle_other.go",
+            "termsize_nosysioctl.go",
+            "termsize_other.go",
+        ],
+        "@io_bazel_rules_go//go/platform:windows": [
+            "optstyle_windows.go",
+            "termsize_nosysioctl.go",
+            "termsize_other.go",
+        ],
+        "//conditions:default": [],
+    }),
+    importpath = "github.com/jessevdk/go-flags",
+    visibility = ["//visibility:public"],
+)
