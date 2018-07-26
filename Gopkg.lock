@@ -2,38 +2,51 @@
 
 
 [[projects]]
+  digest = "1:ffc060c551980d37ee9e428ef528ee2813137249ccebb0bfc412ef83071cac91"
   name = "github.com/golang/protobuf"
   packages = ["proto"]
+  pruneopts = "UT"
   revision = "925541529c1fa6821df4e44ce2723319eb2be768"
   version = "v1.0.0"
 
 [[projects]]
+  digest = "1:1b626a9a3dc9490e97cf64bd3eba87da729b95be0383dda9d0d59fd8ba5da3cf"
   name = "github.com/jessevdk/go-flags"
   packages = ["."]
+  pruneopts = "UT"
   revision = "96dc06278ce32a0e9d957d590bb987c81ee66407"
   version = "v1.3.0"
 
 [[projects]]
   branch = "master"
+  digest = "1:7eb36c25be2c753fc9cc32929ce16355984cf78bec65069e6b46f11108cd2467"
   name = "golang.org/x/crypto"
   packages = [
     "pbkdf2",
-    "ssh/terminal"
+    "ssh/terminal",
   ]
+  pruneopts = "UT"
   revision = "91a49db82a88618983a78a06c1cbd4e00ab749ab"
 
 [[projects]]
   branch = "master"
+  digest = "1:17b462690f58b30c9de76dcc08fea6f6c423e8a2bf9be9ed132ae10f7d75e21e"
   name = "golang.org/x/sys"
   packages = [
     "unix",
-    "windows"
+    "windows",
   ]
+  pruneopts = "UT"
   revision = "f6cff0780e542efa0c8e864dc8fa522808f6a598"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "084d7347bbf0935ba8996d9ee4d4df3e6f04b0adeb1218a2a7bb9e63f9ebd8e6"
+  input-imports = [
+    "github.com/golang/protobuf/proto",
+    "github.com/jessevdk/go-flags",
+    "golang.org/x/crypto/pbkdf2",
+    "golang.org/x/crypto/ssh/terminal",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1
