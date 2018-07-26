@@ -38,4 +38,3 @@ bats_test(
         "//cryptdo/cmd/cryptdo-rekey",
     ],
 )
-

@@ -1,10 +1,9 @@
-load("@io_bazel_rules_go//go:def.bzl", "gazelle", "go_prefix")
-
+load("@bazel_gazelle//:def.bzl", "gazelle")
 
 gazelle(
     name = "gazelle",
-    prefix = "code.xoeb.us/cryptdo",
     external = "vendored",
+    prefix = "code.xoeb.us/cryptdo",
 )
 
 load("@bazel_tools//tools/build_defs/pkg:pkg.bzl", "pkg_tar")
